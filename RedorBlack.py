@@ -135,6 +135,10 @@ class roulette():
         if len(self.mycard) < 7:
             self.mycard.append(card)
 
+    def usecard(self):
+        return
+
+
     def drawCard(self,table):
         if self.mycard is not None:
             for i,card in enumerate(self.mycard):
@@ -179,6 +183,10 @@ class roulette():
                         self.chioce = 0
                     self.turns += 1
                     self.roulette()
+                elif event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        mx, my = pygame.mouse.get_pos()
+                        # TODO use card
             DISPLAYSURF.fill(BGCOLOR)
             self.drawGrid()
             self.drawTable(table)
