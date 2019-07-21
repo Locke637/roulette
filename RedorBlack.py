@@ -5,6 +5,7 @@ FPS = 15
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
 CELLSIZE = 10
+CARDSIZE = 40
 assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
@@ -20,6 +21,7 @@ LIGHTBLUE = (135,206,250)
 DARKGREEN = (0, 155, 0)
 DARKGRAY = (40, 40, 40)
 BGCOLOR = DARKGRAY
+CARDCOLOR = [RED, BLACK, GREEN]
 
 class roulette():
     def __init__(self):
@@ -28,6 +30,7 @@ class roulette():
         self.point = 0
         self.fate = 0
         self.turns = 0
+        self.mycard = []
 
     def showStartScreen(self):
         titleFont = pygame.font.Font('freesansbold.ttf', 50)
@@ -127,6 +130,20 @@ class roulette():
             # PointCircle = pygame.cir(x, y, width, height)
             pygame.draw.circle(DISPLAYSURF, DARKGREEN, (x,y),5,0)
 
+    def sendcard(self):
+        card = random.randint(0,2)
+        if len(self.mycard) < 7:
+            self.mycard.append(card)
+
+    def drawCard(self,table):
+        if self.mycard is not None:
+            for i,card in enumerate(self.mycard):
+                color = CARDCOLOR[card]
+                x = table['x'] * CELLSIZE + 2 + (i) * (CARDSIZE+2)
+                y = table['y'] * CELLSIZE + 2
+                cardRect = pygame.Rect(x, y, CARDSIZE, CARDSIZE*1.5)
+                pygame.draw.rect(DISPLAYSURF, color, cardRect)
+
     def step(self,table):
         if self.chioce == self.fate:
             self.point += 1
@@ -134,6 +151,7 @@ class roulette():
                 self.health += 1
         else:
             self.health -= 1
+            self.sendcard()
             self.point = 0
         if self.health == 0:
             self.terminate()
@@ -166,6 +184,7 @@ class roulette():
             self.drawTable(table)
             self.drawApple(apple)
             self.drawPoint()
+            self.drawCard(table)
             if self.turns>oldturns:
                 # self.drawRob()
                 self.showtime(1,self.drawRob)
@@ -176,7 +195,7 @@ class roulette():
 
 
     def main(self):
-        global FPSCLOCK, DISPLAYSURF, BASICFONT,PRESSFONT
+        global FPSCLOCK, DISPLAYSURF, BASICFONT,PRESSFONT,CARDSIZE,CARDCOLOR
 
         pygame.init()
         FPSCLOCK = pygame.time.Clock()
