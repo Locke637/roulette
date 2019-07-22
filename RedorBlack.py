@@ -1,5 +1,4 @@
 import pygame,sys,random
-from pygame.locals import *
 
 FPS = 15
 WINDOWWIDTH = 640
@@ -204,7 +203,7 @@ class roulette():
                         self.chioce = 0
                     self.turns += 1
                     self.roulette()
-                elif event.type == MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mx, my = pygame.mouse.get_pos()
                         index = self.get_usecardindex(mx,my,table)
