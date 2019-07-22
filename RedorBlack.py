@@ -135,9 +135,32 @@ class roulette():
         if len(self.mycard) < 7:
             self.mycard.append(card)
 
-    def usecard(self):
+    def usecard(self,usecard_index):
+        if usecard_index is not None:
+            usecard = self.mycard[usecard_index]
+            self.mycard.remove(self.mycard[usecard_index])
+            if usecard == 0:
+                self.health += 1
+            elif usecard == 1:
+                self.health -= 1
+            else:
+                self.mycard.append(random.randint(0,2))
+                self.mycard.append(random.randint(0, 2))
+            if self.health == 0:
+                self.terminate()
         return
-
+    def get_usecardindex(self,mx,my,table):
+        x0 = table['x'] * CELLSIZE + 2
+        y0 = table['y'] * CELLSIZE + 2
+        if x0 + (CARDSIZE+2)*len(self.mycard)> mx > x0 and y0 + CARDSIZE*1.5 > my > y0:
+            return int((mx-x0)/(CARDSIZE+2))
+        else:
+            return None
+    def get_apple(self,table):
+        apple = []
+        for i in range(self.health):
+            apple.append({'x': table['x'] + i * 2, 'y': table['y'] - 2})
+        return apple
 
     def drawCard(self,table):
         if self.mycard is not None:
@@ -159,15 +182,13 @@ class roulette():
             self.point = 0
         if self.health == 0:
             self.terminate()
-        apple = []
-        for i in range(self.health):
-            apple.append({'x': table['x']+i*2, 'y': table['y']-2})
+        apple = self.get_apple(table)
         return apple
 
 
     def runGame(self):
         oldturns = 0
-        table = {'x': CELLWIDTH/4, 'y':3*CELLHEIGHT/4}
+        table = {'x': CELLWIDTH/4, 'y': 3*CELLHEIGHT/4}
         apple = []
         for i in range(self.health):
             apple.append({'x': table['x']+i*2, 'y': table['y']-2})
@@ -186,7 +207,9 @@ class roulette():
                 elif event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mx, my = pygame.mouse.get_pos()
-                        # TODO use card
+                        index = self.get_usecardindex(mx,my,table)
+                        self.usecard(index)
+                        apple = self.get_apple(table)
             DISPLAYSURF.fill(BGCOLOR)
             self.drawGrid()
             self.drawTable(table)
