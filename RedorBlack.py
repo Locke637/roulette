@@ -5,6 +5,7 @@ WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
 CELLSIZE = 10
 CARDSIZE = 40
+LIMITCARDS = 3
 assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
@@ -207,7 +208,7 @@ class roulette():
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mx, my = pygame.mouse.get_pos()
-                        if usedcard_count < 3:
+                        if usedcard_count < LIMITCARDS:
                             index = self.get_usecardindex(mx,my,table)
                             self.usecard(index)
                             apple = self.get_apple(table)
@@ -228,7 +229,7 @@ class roulette():
 
 
     def main(self):
-        global FPSCLOCK, DISPLAYSURF, BASICFONT,PRESSFONT,CARDSIZE,CARDCOLOR
+        global FPSCLOCK, DISPLAYSURF, BASICFONT,PRESSFONT,CARDSIZE,CARDCOLOR,LIMITCARDS
 
         pygame.init()
         FPSCLOCK = pygame.time.Clock()
