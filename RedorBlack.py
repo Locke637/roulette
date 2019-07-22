@@ -202,13 +202,16 @@ class roulette():
                     if event.key == pygame.K_b:
                         self.chioce = 0
                     self.turns += 1
+                    usedcard_count = 0
                     self.roulette()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mx, my = pygame.mouse.get_pos()
-                        index = self.get_usecardindex(mx,my,table)
-                        self.usecard(index)
-                        apple = self.get_apple(table)
+                        if usedcard_count < 3:
+                            index = self.get_usecardindex(mx,my,table)
+                            self.usecard(index)
+                            apple = self.get_apple(table)
+                            usedcard_count += 1
             DISPLAYSURF.fill(BGCOLOR)
             self.drawGrid()
             self.drawTable(table)
